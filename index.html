@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>RMDS 2019-NCOV</title>
+        <style>
+            html, body, #viewDiv {
+                padding: 0;
+                margin: 0;
+                height: 100%;
+                width: 100%;
+            }
+        </style>
+        <link rel="shortcut icon" href="icon/favicon.ico" type="image/vnd.microsoft.icon" />
+        <link rel="stylesheet" href="https://js.arcgis.com/4.13/esri/themes/light/main.css">
+        <script src="https://js.arcgis.com/4.14/"></script>
+    </head>
+    <body>
+        <div id="viewDiv"></div>
+    </body>
+    <script>
+        
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            // "esri/widgets/BasemapToggle",
+            // "esri/widgets/BasemapGallery",
+            // "esri/layers/FeatureLayer",
+            "esri/layers/CSVLayer",
+        ], function(Map, MapView, CSVLayer) {
+            var map = new Map({
+                basemap: "topo-vector"
+                //basemap: "satellite"
+                //basemap: "streets-navigation-vector"
+            });
+            var view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [121.4800, 31.2200], // longitude, latitude
+                zoom: 5
+            });
+            //var basemapToggle = new BasemapToggle({
+            //    view: view,
+            //    nextBasemap: "satelite",
+            //});
+
+            //view.ui.add(basemapToggle, "bottom-right");
+            /*
+            var basemapGallery = new BasemapGallery({
+                view: view,
+                source: {
+                    portal: {
+                        url: "https://www.arcgis.com",
+                        useVecotrBasemaps: true, // Load vector tile basemaps
+                    }
+                }
+            });
+
+            view.ui.add(basemapGallery, "top-right");
+            */
+
+            var popupProvince = {
+                "title": "Cases",
+                "content": "<b>Country : </b>{Country/Region}<br><b>City / State : </b>{Province/State}<br><b>Confirmed : </b>{Confirmed}<br><b>Deaths : </b>{Deaths}<br><b>Recovered : </b>{Recovered}<br>",
+            };
+
+            var JHULayer = new CSVLayer({
+                url: "https://grmdsrecommendation.s3-us-west-1.amazonaws.com/integrated.csv",
+                opacity: 0.30,
+                popupTemplate: popupProvince,
+
+            });
+
+
+            JHULayer.renderer = {
+                type: "simple",
+                symbol: {
+                    type: "simple-marker",
+                    color: "red",
+                    outline: null
+                },
+                visualVariables: [{
+                        type: "size",
+                        field: "Confirmed",
+                        minDataValue: 0,
+                        maxDataValue: 3000,
+                        minSize: 8,
+                        maxSize: 80
+                }],
+            };
+
+            map.add(JHULayer);
+        });
+
+        
+    </script>
+</html>
