@@ -56,7 +56,7 @@ class competition_register(object):
 
     def upload_table(self):
         data = self.process_data()
-        engine = create_engine('mysql+mysqlconnector://grmds_analyst:Cmethods1@54.189.68.146/grmds054_drup881',echo=True)
+        engine = create_engine('mysql+mysqlconnector://grmds_analyst:Cmethods1@127.0.0.1/grmds054_drup881',echo=False)
         data.to_sql(name='dr_2020_ds_competition_registration', con=engine, if_exists = 'replace', index=False)
         return 
 
