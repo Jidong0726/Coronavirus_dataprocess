@@ -8,6 +8,7 @@ Created on Tue May 19 15:46:35 2020
 import mysql.connector
 import pandas as pd
 from sqlalchemy import create_engine
+from datetime import datetime
 
 class competition_register(object):
     def __init__(self, username, password):
@@ -67,3 +68,7 @@ class competition_register(object):
 if __name__ == "__main__":
     x = competition_register('grmds_analyst','Cmethods1')
     x.upload_table()
+    file = open("operating_records.txt","a")
+    file.write('registration table updating at '+datetime.now().strftime("%d/%m/%Y %H:%M:%S")+'\n')
+    file.close()
+    
